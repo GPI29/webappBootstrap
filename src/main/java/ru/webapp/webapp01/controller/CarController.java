@@ -22,6 +22,7 @@ public class CarController {
 
     @GetMapping
     public String allCars(Model model){
+//        model.addAttribute("id", carService.findById(id));
         model.addAttribute("cars", carService.listCars());
         return "/admin";
     }
@@ -30,6 +31,11 @@ public class CarController {
     public String createCar(@ModelAttribute("car") Car car){
         carService.add(car);
         return "redirect:/admin";
+    }
+
+    @PostMapping("/update{id}")
+    public Car update(@PathVariable("id") Long id, @RequestBody Car car){
+        return carService.updateCar(id, car);
     }
 
     @PostMapping("/delete{id}")

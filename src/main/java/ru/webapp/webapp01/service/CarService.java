@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.webapp.webapp01.model.Car;
 import ru.webapp.webapp01.repository.CarRepository;
 
+import javax.transaction.Transactional;
+import java.security.PublicKey;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CarService {
@@ -17,6 +20,7 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+    @Transactional
     public void add(Car car){
         carRepository.save(car);
     }
@@ -25,15 +29,27 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public Car show(Long id){
-        return carRepository.getOne(id);
+    @Transactional
+    public Car findById(Long id) {
+        Optional<Car> carResponse = carRepository.findById(id);
+        Car car = carResponse.get();
+        return car;
+    }
+//
+//    public Car show(Long id){
+//        return carRepository.getOne(id);
+//    }
+
+    @Transactional
+    public Car updateCar(Long id, Car car){
+        Car editCar = carRepository.findById(id).get();
+        editCar.setModel(car.getModel());
+        editCar.setMark(car.getMark());
+        editCar.setYear(car.getYear());
+        return carRepository.save(editCar);
     }
 
-    public void update(Long id, Car updateCar){
-      carRepository.getOne(id);
-      carRepository.save(updateCar);
-    }
-
+    @Transactional
     public void delete(Long id){
         carRepository.deleteById(id);
     }

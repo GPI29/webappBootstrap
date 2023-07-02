@@ -1,18 +1,27 @@
 package ru.webapp.webapp01.model;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "cars")
 public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "model")
     private String model;
 
+    @Column(name = "mark")
     private String mark;
 
+    @Column(name = "year")
     private Long year;
 
     public Car(){}

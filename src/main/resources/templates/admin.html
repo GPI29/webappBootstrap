@@ -50,12 +50,12 @@
                       <div>All cars</div>
                       <div class="ml-auto">
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModalCenter">
+                        <button type="button" id="create-car" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createCarDialog">
                           New Car
                         </button>
 
                         <!-- Modal -->
-                        <div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal fade bd-example-modal-lg" id="createCarDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                           <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                               <div class="modal-header">
@@ -65,21 +65,21 @@
 
                                 <form method="post" th:actihon="@{/admin}" th:object="${car}">
                                   <div class="form-group row">
-                                    <label for="model" class="col-sm-2 col-form-label col-form-label-sm">Модель</label>
+                                    <label for="model-add" class="col-sm-2 col-form-label col-form-label-sm">Модель</label>
                                     <div class="col-sm-10">
-                                      <input type="text" field="*{model}" name="model" required="required" class="form-control form-control-sm" id="model" placeholder="введите модель машины">
+                                      <input type="text" field="*{model}" name="model" required="required" class="form-control form-control-sm" id="model-add" placeholder="введите модель машины">
                                     </div>
                                   </div>
                                   <div class="form-group row">
-                                    <label for="mark" class="col-sm-2 col-form-label col-form-label-sm">Марка</label>
+                                    <label for="mark-add" class="col-sm-2 col-form-label col-form-label-sm">Марка</label>
                                     <div class="col-sm-10">
-                                      <input type="text" field="*{mark}" name="mark" required="required" class="form-control form-control-sm" id="mark" placeholder="введите марку машины">
+                                      <input type="text" field="*{mark}" name="mark" required="required" class="form-control form-control-sm" id="mark-add" placeholder="введите марку машины">
                                     </div>
                                   </div>
                                   <div class="form-group row">
-                                    <label for="year" class="col-sm-2 col-form-label col-form-label-sm">Год</label>
+                                    <label for="year-add" class="col-sm-2 col-form-label col-form-label-sm">Год</label>
                                     <div class="col-sm-10">
-                                      <input type="number" field="*{year}" name="year" required="required" class="form-control form-control-sm" id="year" placeholder="введите год машины">
+                                      <input type="number" field="*{year}" name="year" required="required" class="form-control form-control-sm" id="year-add" placeholder="введите год машины">
                                     </div>
                                   </div>
                                   <div class="modal-footer">
@@ -121,14 +121,68 @@
                         <a th:text="${car.getYear()}">year</a>
                       </td>
                       <td>
-                        <button class="btn btn-info btn-sm">Edit</button>
-                      </td>
+
+<!--                        Кнопка редактирования-->
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" th:attr="data-target='#carEditDialog-' + ${car.getId()}">Edit</button>
+
+                        <!--                      Кнопка удаления машин-->
                       <td>
                         <form method="post" th:action="@{/admin/delete{id}(id=${car.getId()})}">
                           <button type="btn btn-primary" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                       </td>
                     </tr>
+
+<!--                    Модальное окно редактирования-->
+                        <div th:each="car : ${cars}" class="modal fade bd-example-modal-lg" th:id="'carEditDialog-' + ${car.getId()}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle02" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h7 class="modal-title" id="'carEditDialog-' + ${car.getId()}">Редактор машины</h7>
+                              </div>
+                              <div class="modal-body">
+                                <form method="post" th:actihon="@{/admin/update{id}(id=${car.getId()})}" th:object="${car}"
+                                      th:id="'carFormEdit-' + ${car.getId()}" name="id">
+
+                                  <div class="form-group row">
+                                    <label for="id-edit" class="col-sm-2 col-form-label col-form-label-sm" hidden>ID</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" th:value="*{id}" name="id" class="form-control form-control-sm" id="id-edit" hidden readonly>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group row">
+                                    <label for="model-edit" class="col-sm-2 col-form-label col-form-label-sm">Модель</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" th:value="*{model}" name="model" class="form-control form-control-sm" id="model-edit">
+                                    </div>
+                                  </div>
+                                  <div class="form-group row">
+                                    <label for="mark-edit" class="col-sm-2 col-form-label col-form-label-sm">Марка</label>
+                                    <div class="col-sm-10">
+                                      <input type="text" th:value="*{mark}" name="mark" class="form-control form-control-sm" id="mark-edit">
+                                    </div>
+                                  </div>
+                                  <div class="form-group row">
+                                    <label for="year-edit" class="col-sm-2 col-form-label col-form-label-sm">Год</label>
+                                    <div class="col-sm-10">
+                                      <input type="number" th:value="*{year}" name="year" class="form-control form-control-sm" id="year-edit">
+                                    </div>
+                                  </div>
+                                </form>
+                                <div class="modal-footer">
+                                  <button type="submit" class="btn btn-success btn-sm" th:form="'carFormEdit-' + ${car.getId()}" name="id">Сохранить</button>
+                                  <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Закрыть</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </td>
+
+
+
                     </tbody>
                   </table>
                 </div>
