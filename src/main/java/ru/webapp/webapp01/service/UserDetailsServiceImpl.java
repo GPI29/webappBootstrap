@@ -7,20 +7,23 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.webapp.webapp01.model.Role;
 import ru.webapp.webapp01.model.User;
+import ru.webapp.webapp01.repository.RoleRepository;
 import ru.webapp.webapp01.repository.UserRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    private final RoleRepository roleRepository;
+
     @Autowired
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     // «Пользователь» – это просто Object. В большинстве случаев он может быть
@@ -36,10 +39,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    public List<Role> listRoles(){
+        return roleRepository.findAll();
+    }
+
+//    public User getId(Long id) {
+//        return userRepository.findById(id).get();
+//    }
+
     @Transactional
     public void add(User user){
-
-
         userRepository.save(user);
     }
 
@@ -50,12 +59,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         editUser.setLastName(user.getLastName());
         editUser.setPassword(user.getPassword());
         editUser.setEmail(user.getEmail());
+        editUser.addRole((Role) user.getRoles());
         return userRepository.save(editUser);
     }
 
     @Transactional
     public void delete(Long id){
         userRepository.deleteById(id);
+    }
+
+    public void registerDefaultUser(User user) {
+        Role roleUser = roleRepository.findByRole("ROLE_USER");
+        user.addRole(roleUser);
+        userRepository.save(user);
     }
 
 }

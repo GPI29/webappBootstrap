@@ -6,8 +6,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.webapp.webapp01.model.Role;
 import ru.webapp.webapp01.model.User;
 import ru.webapp.webapp01.service.UserDetailsServiceImpl;
+
+import java.util.List;
+import java.util.Set;
 
 
 @Controller
@@ -25,20 +29,17 @@ public class AdminController {
     public String all(Model model){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String emailUser = user.getEmail();
+
+        Set<Role> listRoles = userService.listRoles();
+        model.addAttribute("listRoles", listRoles);
         model.addAttribute("email", emailUser);
         model.addAttribute("users", userService.listUsers());
         return "admin";
     }
 
-//    @PostMapping
-//    public String createCar(@ModelAttribute("car") Car car){
-//        carService.add(car);
-//        return "redirect:/admin";
-//    }
-
     @PostMapping
     public String createUser(@ModelAttribute("user") User user){
-        userService.add(user);
+        userService.registerDefaultUser(user);
         return "redirect:/admin";
     }
 
