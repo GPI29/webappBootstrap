@@ -20,10 +20,10 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    @Transactional
-    public void add(Car car){
-        carRepository.save(car);
-    }
+//    @Transactional
+//    public void add(Car car){
+//        carRepository.save(car);
+//    }
 
     public List<Car> listCars(){
         return carRepository.findAll();

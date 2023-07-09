@@ -4,6 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,9 +15,11 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", unique = true)
     private String name;
 
+    private String lastName;
+
+    @Column(name = "email", unique = true)
     private String email;
 
     private String password;
@@ -24,16 +27,21 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User(){}
 
-    public User(Long id, String name, String password, String email, Set<Role> roles) {
+    public User(Long id, String name, String lastName, String password, String email, Set<Role> roles) {
         this.id = id;
         this.name = name;
+        this.lastName = lastName;
         this.password = password;
         this.email = email;
         this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        this.roles.add(role);
     }
 
     public String getEmail() {
@@ -58,6 +66,14 @@ public class User implements UserDetails {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setPassword(String password) {
