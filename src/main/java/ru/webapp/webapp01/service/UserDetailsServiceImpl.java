@@ -11,7 +11,10 @@ import ru.webapp.webapp01.repository.RoleRepository;
 import ru.webapp.webapp01.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -59,7 +62,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         editUser.setLastName(user.getLastName());
         editUser.setPassword(user.getPassword());
         editUser.setEmail(user.getEmail());
-        editUser.addRole((Role) user.getRoles());
         return userRepository.save(editUser);
     }
 
@@ -68,10 +70,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    public void registerDefaultUser(User user) {
-        Role roleUser = roleRepository.findByRole("ROLE_USER");
-        user.addRole(roleUser);
+    public void registerUser(User user, String[] roles) {
+        Set<Role> roleUser = Arrays.stream(roles)
+                        .map(roleRepository::findByRole)
+                                .collect(Collectors.toSet());
+        user.setRoles(roleUser);
         userRepository.save(user);
     }
-
 }

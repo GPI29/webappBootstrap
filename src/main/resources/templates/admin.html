@@ -123,28 +123,26 @@
                                                                 </div>
                                                             </div>
 
-<!--                                                            Чек боксы ролей-->
-<!--                                                            <div class="form-check form-check-inline">-->
-<!--                                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" field=*{role}>-->
-<!--                                                                <label class="form-check-label" for="inlineCheckbox1" name="roles">Admin</label>-->
-<!--                                                            </div>-->
-<!--                                                            <div class="form-check form-check-inline">-->
-<!--                                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" field=*{role.id}>-->
-<!--                                                                <label class="form-check-label" for="inlineCheckbox2" name="roles">User</label>-->
+<!--                                                            <div class="form-group">-->
+<!--                                                                <label class="font-weight-bold m-0" for="newUserRole">Role: </label>-->
+<!--                                                                <select id="newUserRole" class="form-control" name="listRoles" multiple required>-->
+<!--                                                                    <option th:each="role : ${listRoles}"-->
+<!--                                                                            th:value="${role.role}"-->
+<!--                                                                            th:text="${role.role}">-->
+<!--                                                                    </option>-->
+<!--                                                                </select>-->
 <!--                                                            </div>-->
 
                                                             <div class="form-group row">
                                                                 <label class="col-4 col-form-label">Roles: </label>
                                                                 <div class="col-8">
                                                                     <th:block th:each="role: ${listRoles}">
-                                                                        <input type="checkbox" field="*{roles}"
+                                                                        <input type="checkbox" name="listRoles"
                                                                                th:text="${role.role}"
-                                                                               th:value="${role.id}" class="m-2"/>
+                                                                               th:value="${role.role}" class="m-2"/>
                                                                     </th:block>
                                                                 </div>
                                                             </div>
-
-
 
 
                                                     <div class="modal-footer">
@@ -277,7 +275,7 @@
                                                         <label class="col-4 col-form-label">Roles: </label>
                                                         <div class="col-8">
                                                             <th:block th:each="role: ${listRoles}">
-                                                                <input type="checkbox" field="*{roles}"
+                                                                <input type="checkbox"
                                                                        th:text="${role.role}"
                                                                        th:value="${role.id}" class="m-2"/>
                                                             </th:block>

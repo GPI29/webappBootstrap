@@ -11,7 +11,6 @@ import ru.webapp.webapp01.model.User;
 import ru.webapp.webapp01.service.UserDetailsServiceImpl;
 
 import java.util.List;
-import java.util.Set;
 
 
 @Controller
@@ -30,7 +29,7 @@ public class AdminController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String emailUser = user.getEmail();
 
-        Set<Role> listRoles = userService.listRoles();
+        List<Role> listRoles = userService.listRoles();
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("email", emailUser);
         model.addAttribute("users", userService.listUsers());
@@ -38,8 +37,8 @@ public class AdminController {
     }
 
     @PostMapping
-    public String createUser(@ModelAttribute("user") User user){
-        userService.registerDefaultUser(user);
+    public String createUser(@ModelAttribute("user") User user, @RequestParam("listRoles") String[] roles){
+        userService.registerUser(user, roles);
         return "redirect:/admin";
     }
 
